@@ -1,0 +1,305 @@
+-- This script demonstrates the Pandora.lua UI library.
+-- Make sure Pandora.lua is a ModuleScript in ReplicatedStorage,
+-- or adjust the 'require' path accordingly.
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dwadadadadd/gezge/refs/heads/main/yeah"))() -- Adjusted to use your loadstring
+
+-- Create the main UI window
+local UI = Library:Window({
+	Name = "Aleph Null UI"
+})
+
+-- Combat Tab
+local CombatPage = UI:Page({
+	Name = "Combat"
+})
+
+local CombatSection = CombatPage:Section({
+	Name = "Aimbot Settings",
+	LeftTitle = "Main",
+	RightTitle = "Advanced"
+})
+
+CombatSection:Toggle({
+	Name = "Aimbot",
+	State = false,
+	Callback = function(state)
+		print("Aimbot Toggled: " .. tostring(state))
+	end,
+	Side = "Left"
+}):Keybind({
+	Name = "Aimbot Toggle",
+	State = Enum.KeyCode.E, -- Default keybind for Aimbot
+	Mode = "Toggle",
+	Callback = function(state)
+		print("Aimbot Keybind State: " .. tostring(state))
+	end
+})
+
+CombatSection:Toggle({
+	Name = "Silent Aim",
+	State = false,
+	Callback = function(state)
+		print("Silent Aim Toggled: " .. tostring(state))
+	end,
+	Side = "Left"
+}):Keybind({
+	Name = "Silent Aim Toggle",
+	State = Enum.KeyCode.R, -- Default keybind for Silent Aim
+	Mode = "Hold",
+	Callback = function(state)
+		print("Silent Aim Keybind State: " .. tostring(state))
+	end
+})
+
+CombatSection:Toggle({
+	Name = "Triggerbot",
+	State = false,
+	Callback = function(state)
+		print("Triggerbot Toggled: " .. tostring(state))
+	end,
+	Side = "Left"
+}):Keybind({
+	Name = "Triggerbot Toggle",
+	State = Enum.UserInputType.MouseButton2, -- Default keybind for Triggerbot (RMB)
+	Mode = "Hold",
+	Callback = function(state)
+		print("Triggerbot Keybind State: " .. tostring(state))
+	end
+})
+
+CombatSection:Toggle({
+	Name = "Other Combat Feature",
+	State = false,
+	Callback = function(state)
+		print("Other Combat Feature Toggled: " .. tostring(state))
+	end,
+	Side = "Right"
+})
+
+-- Visuals Tab
+local VisualsPage = UI:Page({
+	Name = "Visuals"
+})
+
+local VisualsSection = VisualsPage:Section({
+	Name = "ESP Settings",
+	LeftTitle = "General",
+	RightTitle = "Advanced"
+})
+
+VisualsSection:Toggle({
+	Name = "Player ESP",
+	State = true,
+	Callback = function(state)
+		print("Player ESP Toggled: " .. tostring(state))
+	end,
+	Side = "Left"
+})
+
+VisualsSection:Toggle({
+	Name = "Self ESP",
+	State = false,
+	Callback = function(state)
+		print("Self ESP Toggled: " .. tostring(state))
+	end,
+	Side = "Left"
+})
+
+VisualsSection:Toggle({
+	Name = "World ESP",
+	State = false,
+	Callback = function(state)
+		print("World ESP Toggled: " .. tostring(state))
+	end,
+	Side = "Right"
+})
+
+VisualsSection:Toggle({
+	Name = "Other Visuals",
+	State = false,
+	Callback = function(state)
+		print("Other Visuals Toggled: " .. tostring(state))
+	end,
+	Side = "Right"
+})
+
+-- Misc Tab
+local MiscPage = UI:Page({
+	Name = "Misc"
+})
+
+local MiscSection = MiscPage:Section({
+	Name = "Miscellaneous",
+	LeftTitle = "Movement",
+	RightTitle = "Utilities"
+})
+
+MiscSection:Slider({
+	Name = "Walk Speed",
+	Min = 16,
+	Max = 100,
+	State = 16,
+	Decimals = 1,
+	Sub = " studs/s",
+	Callback = function(value)
+		print("Walk Speed: " .. tostring(value))
+	end,
+	Side = "Left"
+})
+
+MiscSection:Slider({
+	Name = "Fly Speed",
+	Min = 0,
+	Max = 500,
+	State = 50,
+	Decimals = 5, -- Changed to 5 decimals for demonstration
+	Sub = " studs/s",
+	Callback = function(value)
+		print("Fly Speed: " .. tostring(value))
+	end,
+	Side = "Left"
+})
+
+MiscSection:List({
+	Name = "Player List Filter",
+	Options = {"All", "Friends", "Enemies"},
+	State = "All",
+	Callback = function(value)
+		print("Player List Filter: " .. tostring(value))
+	end,
+	Side = "Right"
+})
+
+MiscSection:Toggle({
+	Name = "Other Misc Feature",
+	State = false,
+	Callback = function(state)
+		print("Other Misc Feature Toggled: " .. tostring(state))
+	end,
+	Side = "Right"
+})
+
+-- Keybinds List Display (placed in Misc tab for demonstration)
+local KeybindListSection = MiscPage:Section({
+    Name = "Active Keybinds",
+    LeftTitle = "Keybinds Overview",
+    RightTitle = "Details"
+})
+
+local myKeybindListDisplay = KeybindListSection:KeybindListDisplay({
+    Name = "Configured Keybinds",
+    Side = "Left"
+})
+
+-- Settings Tab
+local SettingsPage = UI:Page({
+	Name = "Settings"
+})
+
+local UISettingsSection = SettingsPage:Section({
+	Name = "UI Customization",
+	LeftTitle = "Colors",
+	RightTitle = "General"
+})
+
+UISettingsSection:Colorpicker({
+	Name = "Accent Color",
+	State = Library.Accent, -- Use the current accent color
+	Callback = function(color)
+		Library:ChangeAccent(color) -- Update the accent color
+		print("Accent Color Changed: " .. tostring(color))
+	end,
+	Side = "Left"
+})
+
+UISettingsSection:Colorpicker({
+	Name = "Main Background",
+	State = UI.Elements.Main.BackgroundColor3,
+	Callback = function(color)
+		UI.Elements.Main.BackgroundColor3 = color
+		print("Main Background Color Changed: " .. tostring(color))
+	end,
+	Side = "Left"
+})
+
+UISettingsSection:Colorpicker({
+	Name = "Inline Background",
+	State = UI.Elements.Inline.BackgroundColor3,
+	Callback = function(color)
+		UI.Elements.Inline.BackgroundColor3 = color
+		print("Inline Background Color Changed: " .. tostring(color))
+	end,
+	Side = "Left"
+})
+
+UISettingsSection:Colorpicker({
+	Name = "Middle Background",
+	State = UI.Elements.Middle.BackgroundColor3,
+	Callback = function(color)
+		UI.Elements.Middle.BackgroundColor3 = color
+		print("Middle Background Color Changed: " .. tostring(color))
+	end,
+	Side = "Left"
+})
+
+UISettingsSection:Colorpicker({
+	Name = "Text Color",
+	State = Color3.new(0.3059,0.3059,0.3059), -- Default text color
+	Callback = function(color)
+		-- This would require iterating through all text labels,
+		-- which isn't directly supported by a single 'ThemeObject' for all text.
+		-- For demonstration, we'll just print.
+		print("Attempted to change general text color: " .. tostring(color))
+	end,
+	Side = "Right"
+})
+
+
+local ConfigSection = SettingsPage:Section({
+	Name = "Configuration",
+	LeftTitle = "Save/Load",
+	RightTitle = "Options"
+})
+
+ConfigSection:Button({
+	Name = "Save Config",
+	Callback = function()
+		local configString = Library:GetConfig()
+		print("Config Saved:\n" .. configString)
+		-- In a real scenario, you'd save this string to a datastore or file.
+	end,
+	Side = "Left"
+})
+
+ConfigSection:Textbox({
+	Name = "Load Config String",
+	Placeholder = "Paste config string here...",
+	Callback = function(text)
+		print("Attempting to load config from string...")
+		Library:LoadConfig(text)
+	end,
+	Side = "Left"
+})
+
+ConfigSection:Toggle({
+	Name = "Toggle Keybind List",
+	State = true, -- Assuming it's visible by default
+	Callback = function(state)
+		-- This toggle will control the visibility of the KeybindListDisplay
+		-- You would need to store a reference to the KeybindListDisplay and toggle its parent's visibility.
+		-- For this example, we'll just print.
+		if myKeybindListDisplay and myKeybindListDisplay.Section and myKeybindListDisplay.Section.Elements then
+			local listHolder = myKeybindListDisplay.Section.Elements.Left.Parent -- Get the parent of the list display
+			if listHolder then
+				listHolder.Visible = state
+				print("Keybind List Visibility: " .. tostring(state))
+			end
+		end
+	end,
+	Side = "Right"
+})
+
+-- Initial setup for the UI visibility (optional, can be controlled by a keybind in a real app)
+-- Library:SetOpen(true) -- Uncomment to make UI visible on start
